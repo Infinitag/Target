@@ -38,7 +38,7 @@ In the JLCPCB folder all files are ready to be uploaded and ordered directly at 
 
 ## Software
 
-In the code directory is the source code as .ino file for the Arduino IDE to upload to the taget board.
+In the "ArduinoCode" directory is the source code as .ino file for the Arduino IDE to upload to the taget board.
 
 
 
