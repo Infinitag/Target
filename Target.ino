@@ -2,26 +2,35 @@
 #include <Arduino.h>
 #include <stdlib.h>
 
+#define LED_BUILTIN 2 // Fix for IRRemote lib warning
+#define SEND_PWM_BY_TIMER // Fix for IRRemote lib warning
+
 // Wifi
-#include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
+#include <WiFiManager.h>
 WiFiManager wm;
 int cpTimeout = 90; // Timeout for the configuration portal
 WiFiManagerParameter custom_led_delay("led_delay", "LED delay", "", 10);
 
+// Core
+#include <Infinitag_Core.h>
+Infinitag_Core infinitagCore;
+
 // WifiManager configuration portal button
-#define BTN_CP_START 15
+#define BTN_CP_START 17
 int buttonState = 0;
 
 // IR
-#define DECODE_SAMSUNG
+#define DECODE_RC5
 #include <IRremote.hpp>
 #define IR_RECEIVE_PIN 16
+IRrecv irrecv(IR_RECEIVE_PIN);
+decode_results results;
 
 // LED
 #include <Adafruit_NeoPixel.h>
 #define LED_PIN     18
 #define LED_COUNT  12
-#define BRIGHTNESS 255 // Set BRIGHTNESS to about 1/5 (max = 255)
+#define BRIGHTNESS 255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
 // Switches
@@ -31,18 +40,21 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 #define SW_4     23
 
 // Color Settings
-int ledColorWifiReboot[4] = {0, 0, 0, 100};
-int ledColorWifiWait[4] = {100, 100, 0, 0};
-int ledColorIdle[4] = {100, 0, 100, 0};
-int ledColorHit[4] = {50, 0, 0, 0};
+int ledColorWifiReboot[4] = {0, 0, 0, 255};
+int ledColorWifiWait[4] = {255, 255, 0, 0};
+int ledColorIdle[4] = {255, 0, 255, 0};
+int ledColorHit[4] = {255, 0, 0, 0};
+int ledColorMissHit[4] = {0, 255, 255, 0};
 
 // General
 bool targetHit = false;
 #define TEST_LED_PIN 2
 
 void setup() {
-  Serial.begin(9600);
-  
+  // Disable Log to prevent Serial Log
+  wm.setDebugOutput(false); 
+
+  // Test blink 
   pinMode(TEST_LED_PIN, OUTPUT);
   digitalWrite(TEST_LED_PIN, HIGH);
   delay(1000);
@@ -50,9 +62,6 @@ void setup() {
   
   // Wifi - 1
   WiFi.mode(WIFI_STA);
-  
-  //Serial.begin(115200);
-  //Serial.println(F("Starting APP"));
 
   // Set configuration portal PIN
   pinMode(BTN_CP_START, INPUT);
@@ -74,6 +83,7 @@ void setup() {
   // Added exit to start loop after configuration
   std::vector<const char *> menu = {"wifi","info","param","close","sep","update","exit"}; // Added param to the menu
   wm.setMenu(menu); // custom menu, pass vector
+  wm.setHostname("InfinitagTarget_1");
   
   // LED
   strip.begin();
@@ -84,14 +94,11 @@ void setup() {
   // Wifi - 2
   //wm.resetSettings(); // Only for Develop - Remove after
   // Auto Connect
-  if (!wm.autoConnect("WMAutoConnectAP","12345678")) {
-    if (Serial) {
-      Serial.println("failed to connect and hit timeout");
-    }
+  if (!wm.autoConnect("InfinitagTarget_1","12345678")) {
   }
     
   // IR
-  IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
+  irrecv.enableIRIn();
 
   // General 
   targetHit = false;
@@ -100,36 +107,35 @@ void setup() {
 void loop() {
   irDecode();
 
-  if (IrReceiver.isIdle()) {
-    configPortalButton();
-    
-    if (targetHit) {
-      targetHitLoop();
-    } else {
-      targetNotHitLoop();
-    }
+  configPortalButton();
+  
+  if (targetHit) {
+    targetHitLoop();
+  } else {
+    targetNotHitLoop();
   }
 }
 
 void targetNotHitLoop() {
-  digitalWrite(SW_1, LOW);
-  digitalWrite(SW_2, LOW);
-  digitalWrite(SW_3, LOW);
-  digitalWrite(SW_4, LOW);
-  strip.fill(strip.Color(ledColorIdle[0], ledColorIdle[1], ledColorIdle[2], ledColorIdle[3]));
-  strip.show();
+  setAllSwitches(LOW);
+  ledFillFull(ledColorIdle);
 }
 
 void targetHitLoop() {
-  digitalWrite(SW_1, HIGH);
-  digitalWrite(SW_2, HIGH);
-  digitalWrite(SW_3, HIGH);
-  digitalWrite(SW_4, HIGH);
-  strip.fill(strip.Color(ledColorHit[0], ledColorHit[1], ledColorHit[2], ledColorHit[3]));
-  strip.show();
+  setAllSwitches(HIGH);
+  
+  ledFillFull(ledColorHit);
+  
   targetHit = false;
   delay(1000);
   IrReceiver.resume();
+}
+
+void setAllSwitches(int state) {
+  digitalWrite(SW_1, state);
+  digitalWrite(SW_2, state);
+  digitalWrite(SW_3, state);
+  digitalWrite(SW_4, state);
 }
 
 void configPortalButton() {
@@ -143,20 +149,35 @@ void configPortalButton() {
 }
 
 void irDecode() {
+  // IR signal received?
   if (IrReceiver.decode()) {
-    if (IrReceiver.decodedIRData.address == 0x707) {
-      if (IrReceiver.decodedIRData.command == 0x7) {
-        targetHit = true;
+    
+    // Is the IR signal a Infinitag signal?
+    if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
+      
+      // Validate all required Infinitag parameters for a valid hit
+      if (infinitagCore.irRecvIsSystem == false && infinitagCore.irRecvGameId == 0
+        && infinitagCore.irRecvTeamId == 0 && infinitagCore.irRecvPlayerId == 0
+        && infinitagCore.irRecvCmd == 1 && infinitagCore.irRecvCmdValue == 255) {
+          targetHit = true;
       }
+    } else {
+      ledFillFull(ledColorMissHit);
+      delay(150);
+      strip.clear();
     }
+    
     IrReceiver.resume();
   }
 }
 
 void ledShowSetup() {
-  strip.fill(strip.Color(ledColorWifiReboot[0], ledColorWifiReboot[1], ledColorWifiReboot[2], ledColorWifiReboot[3]));
-  strip.show();
+  ledFillFull(ledColorWifiReboot);
   delay(150);
-  strip.fill(strip.Color(ledColorWifiWait[0], ledColorWifiWait[1], ledColorWifiWait[2], ledColorWifiWait[3]));
+  ledFillFull(ledColorWifiWait);
+}
+
+void ledFillFull(int color[]) {
+  strip.fill(strip.Color(color[0], color[1], color[2], color[3]));
   strip.show();
 }
