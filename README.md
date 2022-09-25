@@ -62,3 +62,14 @@ The following must be selected as the board for the upload:
 ESP32 Arduino > ESP32 Dev Module
 
 Additionally the value "16MB (128Mb)" must be selected under "Flash size".
+
+
+
+## License
+
+All files are published under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+## Additional
+
+For more information about the Infinitag System please visit [infinitag.io](http://www.infinitag.io).
