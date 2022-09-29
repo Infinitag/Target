@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="E">
   <design>
-    <source>C:\Users\Crusher\Documents\git\Target\target\target.kicad_sch</source>
-    <date>06.09.2022 16:42:50</date>
+    <source>C:\Users\Crusher\Documents\git\Target\Hardware\PCB\KiCad6\target.kicad_sch</source>
+    <date>29.09.2022 16:54:44</date>
     <tool>Eeschema (6.0.5)</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
@@ -56,17 +56,17 @@
       <tstamps>78cd5d1f-8e7c-487c-b9b3-463e289fb2ce</tstamps>
     </comp>
     <comp ref="C2">
-      <value>100nF</value>
-      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <value>10uF</value>
+      <footprint>Capacitor_Tantalum_SMD:CP_EIA-2012-12_Kemet-R_Pad1.30x1.05mm_HandSolder</footprint>
       <fields>
-        <field name="LCSC">C49678</field>
+        <field name="LCSC">C2976905</field>
       </fields>
-      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
-      <property name="LCSC" value="C49678"/>
+      <libsource lib="Device" part="C_Polarized" description="Polarized capacitor"/>
+      <property name="LCSC" value="C2976905"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>4ac4bb61-3157-48d4-a43f-525b8f22f112</tstamps>
+      <tstamps>883040fa-5961-497a-82cc-c3c884416fec</tstamps>
     </comp>
     <comp ref="C3">
       <value>100nF</value>
@@ -79,7 +79,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>facf5163-9843-482f-940a-aab8900b43a3</tstamps>
+      <tstamps>4ac4bb61-3157-48d4-a43f-525b8f22f112</tstamps>
     </comp>
     <comp ref="C4">
       <value>100nF</value>
@@ -92,7 +92,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>ba1ee15e-0d67-4f33-b340-d92dbf83df49</tstamps>
+      <tstamps>facf5163-9843-482f-940a-aab8900b43a3</tstamps>
     </comp>
     <comp ref="C5">
       <value>100nF</value>
@@ -105,7 +105,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>e60e6da6-0cb3-48f6-a748-0a444b5a93fc</tstamps>
+      <tstamps>ba1ee15e-0d67-4f33-b340-d92dbf83df49</tstamps>
     </comp>
     <comp ref="C6">
       <value>100nF</value>
@@ -118,7 +118,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>e505f18f-251a-416f-81ad-d5e0289786d6</tstamps>
+      <tstamps>e60e6da6-0cb3-48f6-a748-0a444b5a93fc</tstamps>
     </comp>
     <comp ref="C7">
       <value>100nF</value>
@@ -131,7 +131,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>13e0fb05-49e7-40d4-9aff-a8ddc7f0457a</tstamps>
+      <tstamps>e505f18f-251a-416f-81ad-d5e0289786d6</tstamps>
     </comp>
     <comp ref="C8">
       <value>100nF</value>
@@ -144,7 +144,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>a2a32bca-e42d-4910-a78e-e6efc40b0094</tstamps>
+      <tstamps>13e0fb05-49e7-40d4-9aff-a8ddc7f0457a</tstamps>
     </comp>
     <comp ref="C9">
       <value>100nF</value>
@@ -157,7 +157,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>f71dda15-62ef-49d0-9431-5cb90d7bc524</tstamps>
+      <tstamps>a2a32bca-e42d-4910-a78e-e6efc40b0094</tstamps>
     </comp>
     <comp ref="C10">
       <value>100nF</value>
@@ -170,7 +170,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>540906e9-7d76-4815-826d-f28cebc2023b</tstamps>
+      <tstamps>f71dda15-62ef-49d0-9431-5cb90d7bc524</tstamps>
     </comp>
     <comp ref="C11">
       <value>100nF</value>
@@ -183,7 +183,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>ec24e16f-6a7b-43a2-9ef3-82295e3fa6dd</tstamps>
+      <tstamps>540906e9-7d76-4815-826d-f28cebc2023b</tstamps>
     </comp>
     <comp ref="C12">
       <value>100nF</value>
@@ -196,7 +196,7 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>ee7e9560-0fe0-4532-bc26-0d07ee7b5c78</tstamps>
+      <tstamps>ec24e16f-6a7b-43a2-9ef3-82295e3fa6dd</tstamps>
     </comp>
     <comp ref="C13">
       <value>100nF</value>
@@ -209,9 +209,22 @@
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
-      <tstamps>a35e8518-f633-4422-89f8-af29cbee18af</tstamps>
+      <tstamps>ee7e9560-0fe0-4532-bc26-0d07ee7b5c78</tstamps>
     </comp>
     <comp ref="C14">
+      <value>100nF</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
+      <fields>
+        <field name="LCSC">C49678</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C49678"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="target.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>a35e8518-f633-4422-89f8-af29cbee18af</tstamps>
+    </comp>
+    <comp ref="C15">
       <value>100nF</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
       <fields>
@@ -228,7 +241,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -238,7 +255,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -248,7 +269,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -258,7 +283,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -268,7 +297,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -278,7 +311,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -288,7 +325,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -298,7 +339,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -308,7 +353,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -318,7 +367,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -328,7 +381,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -377,7 +434,11 @@
       <value>SK6812</value>
       <footprint>LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</footprint>
       <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5160656</field>
+      </fields>
       <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C5160656"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
@@ -397,19 +458,6 @@
       <tstamps>77bebd40-cc63-477e-b208-57ef65a2a9fe</tstamps>
     </comp>
     <comp ref="J1">
-      <value>Additional Pins</value>
-      <footprint>Connector_PinHeader_2.54mm:PinHeader_2x10_P2.54mm_Vertical</footprint>
-      <fields>
-        <field name="LCSC">C706900</field>
-      </fields>
-      <libsource lib="Connector_Generic" part="Conn_02x10_Top_Bottom" description="Generic connector, double row, 02x10, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)"/>
-      <property name="LCSC" value="C706900"/>
-      <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="target.kicad_sch"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamps>30455d40-60ea-4747-9b35-253b7492ba31</tstamps>
-    </comp>
-    <comp ref="J2">
       <value>SW-5V</value>
       <footprint>Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal</footprint>
       <fields>
@@ -422,7 +470,7 @@
       <sheetpath names="/" tstamps="/"/>
       <tstamps>427e77b8-2893-43c0-8ddd-8a2c78c9116a</tstamps>
     </comp>
-    <comp ref="J3">
+    <comp ref="J2">
       <value>SW-1</value>
       <footprint>Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal</footprint>
       <fields>
@@ -434,6 +482,19 @@
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamps>569c22c2-9f1c-4627-b7a2-a1c1775c6866</tstamps>
+    </comp>
+    <comp ref="J3">
+      <value>Conn_02x12_Odd_Even</value>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_2x12_P2.54mm_Vertical</footprint>
+      <fields>
+        <field name="LCSC">C62744</field>
+      </fields>
+      <libsource lib="Connector_Generic" part="Conn_02x12_Odd_Even" description="Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"/>
+      <property name="LCSC" value="C62744"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="target.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>9f24588f-f04c-46bf-ba8a-9cc70f02e3c5</tstamps>
     </comp>
     <comp ref="J4">
       <value>SW-3.3V</value>
@@ -499,6 +560,15 @@
       <property name="Sheetfile" value="target.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamps>64b9d463-364a-4cc0-bc1c-17a5c7918425</tstamps>
+    </comp>
+    <comp ref="JP1">
+      <value>Disable ESP Log</value>
+      <footprint>Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm</footprint>
+      <libsource lib="Jumper" part="SolderJumper_2_Open" description="Solder Jumper, 2-pole, open"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="target.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7602aab7-2930-4c3f-a27e-a62765f8dd30</tstamps>
     </comp>
     <comp ref="Q1">
       <value>BSS138</value>
@@ -606,7 +676,7 @@
       <sheetpath names="/" tstamps="/"/>
       <tstamps>5019d28f-008c-4fbd-b325-ce9b9d258948</tstamps>
     </comp>
-    <comp ref="C15">
+    <comp ref="C16">
       <value>4.7uF</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
       <fields>
@@ -619,7 +689,7 @@
       <sheetpath names="/ESP32_programmer/" tstamps="/0fe1749e-a016-4d26-8347-98d3e344201c/"/>
       <tstamps>da0bb86a-1dca-4e44-86d3-ab94106a91f3</tstamps>
     </comp>
-    <comp ref="C16">
+    <comp ref="C17">
       <value>10uF</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
       <fields>
@@ -632,7 +702,7 @@
       <sheetpath names="/ESP32_programmer/" tstamps="/0fe1749e-a016-4d26-8347-98d3e344201c/"/>
       <tstamps>8ae0057e-b26d-471d-9c1b-18eec0021af2</tstamps>
     </comp>
-    <comp ref="C17">
+    <comp ref="C18">
       <value>100nF</value>
       <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder</footprint>
       <fields>
@@ -961,15 +1031,15 @@
         <pin num="3" name="Pin_3" type="passive"/>
       </pins>
     </libpart>
-    <libpart lib="Connector_Generic" part="Conn_02x10_Top_Bottom">
-      <description>Generic connector, double row, 02x10, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+    <libpart lib="Connector_Generic" part="Conn_02x12_Odd_Even">
+      <description>Generic connector, double row, 02x12, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)</description>
       <docs>~</docs>
       <footprints>
         <fp>Connector*:*_2x??_*</fp>
       </footprints>
       <fields>
         <field name="Reference">J</field>
-        <field name="Value">Conn_02x10_Top_Bottom</field>
+        <field name="Value">Conn_02x12_Odd_Even</field>
         <field name="Datasheet">~</field>
       </fields>
       <pins>
@@ -993,6 +1063,10 @@
         <pin num="18" name="Pin_18" type="passive"/>
         <pin num="19" name="Pin_19" type="passive"/>
         <pin num="20" name="Pin_20" type="passive"/>
+        <pin num="21" name="Pin_21" type="passive"/>
+        <pin num="22" name="Pin_22" type="passive"/>
+        <pin num="23" name="Pin_23" type="passive"/>
+        <pin num="24" name="Pin_24" type="passive"/>
       </pins>
     </libpart>
     <libpart lib="Device" part="C">
@@ -1004,6 +1078,22 @@
       <fields>
         <field name="Reference">C</field>
         <field name="Value">C</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C_Polarized">
+      <description>Polarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>CP_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C_Polarized</field>
         <field name="Datasheet">~</field>
       </fields>
       <pins>
@@ -1117,6 +1207,22 @@
         <pin num="14" name="~{RTS}" type="output"/>
         <pin num="15" name="R232" type="input"/>
         <pin num="16" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Jumper" part="SolderJumper_2_Open">
+      <description>Solder Jumper, 2-pole, open</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>SolderJumper*Open*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">JP</field>
+        <field name="Value">SolderJumper_2_Open</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="A" type="passive"/>
+        <pin num="2" name="B" type="passive"/>
       </pins>
     </libpart>
     <libpart lib="LED" part="SK6812">
@@ -1279,6 +1385,9 @@
     <library logical="Interface_USB">
       <uri>C:\Program Files\KiCad\6.0\share\kicad\symbols\/Interface_USB.kicad_sym</uri>
     </library>
+    <library logical="Jumper">
+      <uri>C:\Program Files\KiCad\6.0\share\kicad\symbols\/Jumper.kicad_sym</uri>
+    </library>
     <library logical="LED">
       <uri>C:\Program Files\KiCad\6.0\share\kicad\symbols\/LED.kicad_sym</uri>
     </library>
@@ -1300,12 +1409,14 @@
   </libraries>
   <nets>
     <net code="1" name="+3V3">
-      <node ref="C16" pin="2" pintype="passive"/>
       <node ref="C17" pin="2" pintype="passive"/>
-      <node ref="C3" pin="2" pintype="passive"/>
+      <node ref="C18" pin="2" pintype="passive"/>
+      <node ref="C4" pin="2" pintype="passive"/>
+      <node ref="J3" pin="23" pinfunction="Pin_23" pintype="passive"/>
       <node ref="J4" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="R6" pin="1" pintype="passive"/>
       <node ref="U1" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="U2" pin="2" pinfunction="Vs" pintype="power_in"/>
       <node ref="U3" pin="2" pinfunction="VO" pintype="power_out"/>
       <node ref="U4" pin="16" pinfunction="VCC" pintype="power_in"/>
       <node ref="U4" pin="4" pinfunction="V3" pintype="passive"/>
@@ -1318,8 +1429,8 @@
       <node ref="C13" pin="2" pintype="passive"/>
       <node ref="C14" pin="2" pintype="passive"/>
       <node ref="C15" pin="2" pintype="passive"/>
-      <node ref="C2" pin="2" pintype="passive"/>
-      <node ref="C4" pin="2" pintype="passive"/>
+      <node ref="C16" pin="2" pintype="passive"/>
+      <node ref="C3" pin="2" pintype="passive"/>
       <node ref="C5" pin="2" pintype="passive"/>
       <node ref="C6" pin="2" pintype="passive"/>
       <node ref="C7" pin="2" pintype="passive"/>
@@ -1337,96 +1448,98 @@
       <node ref="D7" pin="3" pinfunction="VDD" pintype="power_in"/>
       <node ref="D8" pin="3" pinfunction="VDD" pintype="power_in"/>
       <node ref="D9" pin="3" pinfunction="VDD" pintype="power_in"/>
-      <node ref="J2" pin="1" pinfunction="Pin_1" pintype="passive"/>
+      <node ref="J1" pin="1" pinfunction="Pin_1" pintype="passive"/>
+      <node ref="J3" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="J6" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="J7" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="J8" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="J9" pin="1" pinfunction="VBUS" pintype="power_out"/>
       <node ref="R5" pin="1" pintype="passive"/>
-      <node ref="U2" pin="2" pinfunction="Vs" pintype="power_in"/>
       <node ref="U3" pin="3" pinfunction="VI" pintype="power_in"/>
     </net>
     <net code="3" name="/ESP_A_P4">
-      <node ref="J1" pin="1" pinfunction="Pin_1" pintype="passive"/>
+      <node ref="J3" pin="3" pinfunction="Pin_3" pintype="passive"/>
       <node ref="U1" pin="4" pinfunction="SENSOR_VP" pintype="input"/>
     </net>
     <net code="4" name="/ESP_A_P5">
-      <node ref="J1" pin="2" pinfunction="Pin_2" pintype="passive"/>
+      <node ref="J3" pin="5" pinfunction="Pin_5" pintype="passive"/>
       <node ref="U1" pin="5" pinfunction="SENSOR_VN" pintype="input"/>
     </net>
     <net code="5" name="/ESP_A_P6">
-      <node ref="J1" pin="3" pinfunction="Pin_3" pintype="passive"/>
+      <node ref="J3" pin="7" pinfunction="Pin_7" pintype="passive"/>
       <node ref="U1" pin="6" pinfunction="IO34" pintype="input"/>
     </net>
     <net code="6" name="/ESP_A_P7">
-      <node ref="J1" pin="4" pinfunction="Pin_4" pintype="passive"/>
+      <node ref="J3" pin="9" pinfunction="Pin_9" pintype="passive"/>
       <node ref="U1" pin="7" pinfunction="IO35" pintype="input"/>
     </net>
     <net code="7" name="/ESP_A_P8">
-      <node ref="J1" pin="5" pinfunction="Pin_5" pintype="passive"/>
+      <node ref="J3" pin="11" pinfunction="Pin_11" pintype="passive"/>
       <node ref="U1" pin="8" pinfunction="IO32" pintype="bidirectional"/>
     </net>
     <net code="8" name="/ESP_A_P9">
-      <node ref="J1" pin="6" pinfunction="Pin_6" pintype="passive"/>
+      <node ref="J3" pin="13" pinfunction="Pin_13" pintype="passive"/>
       <node ref="U1" pin="9" pinfunction="IO33" pintype="bidirectional"/>
     </net>
     <net code="9" name="/ESP_A_P10">
-      <node ref="J1" pin="7" pinfunction="Pin_7" pintype="passive"/>
+      <node ref="J3" pin="15" pinfunction="Pin_15" pintype="passive"/>
       <node ref="U1" pin="10" pinfunction="IO25" pintype="bidirectional"/>
     </net>
     <net code="10" name="/ESP_A_P11">
-      <node ref="J1" pin="8" pinfunction="Pin_8" pintype="passive"/>
+      <node ref="J3" pin="17" pinfunction="Pin_17" pintype="passive"/>
       <node ref="U1" pin="11" pinfunction="IO26" pintype="bidirectional"/>
     </net>
     <net code="11" name="/ESP_A_P12">
-      <node ref="J1" pin="9" pinfunction="Pin_9" pintype="passive"/>
+      <node ref="J3" pin="19" pinfunction="Pin_19" pintype="passive"/>
       <node ref="U1" pin="12" pinfunction="IO27" pintype="bidirectional"/>
     </net>
     <net code="12" name="/ESP_A_P13">
-      <node ref="J1" pin="10" pinfunction="Pin_10" pintype="passive"/>
+      <node ref="J3" pin="21" pinfunction="Pin_21" pintype="passive"/>
       <node ref="U1" pin="13" pinfunction="IO14" pintype="bidirectional"/>
     </net>
     <net code="13" name="/ESP_A_P14">
-      <node ref="J1" pin="11" pinfunction="Pin_11" pintype="passive"/>
+      <node ref="J3" pin="4" pinfunction="Pin_4" pintype="passive"/>
       <node ref="U1" pin="14" pinfunction="IO12" pintype="bidirectional"/>
     </net>
     <net code="14" name="/ESP_A_P16">
-      <node ref="J1" pin="12" pinfunction="Pin_12" pintype="passive"/>
+      <node ref="J3" pin="6" pinfunction="Pin_6" pintype="passive"/>
       <node ref="U1" pin="16" pinfunction="IO13" pintype="bidirectional"/>
     </net>
     <net code="15" name="/ESP_A_P17">
-      <node ref="J1" pin="13" pinfunction="Pin_13" pintype="passive"/>
+      <node ref="J3" pin="8" pinfunction="Pin_8" pintype="passive"/>
       <node ref="U1" pin="17" pinfunction="SHD/SD2" pintype="bidirectional"/>
     </net>
     <net code="16" name="/ESP_A_P18">
-      <node ref="J1" pin="14" pinfunction="Pin_14" pintype="passive"/>
+      <node ref="J3" pin="10" pinfunction="Pin_10" pintype="passive"/>
       <node ref="U1" pin="18" pinfunction="SWP/SD3" pintype="bidirectional"/>
     </net>
     <net code="17" name="/ESP_A_P19">
-      <node ref="J1" pin="15" pinfunction="Pin_15" pintype="passive"/>
+      <node ref="J3" pin="12" pinfunction="Pin_12" pintype="passive"/>
       <node ref="U1" pin="19" pinfunction="SCS/CMD" pintype="bidirectional"/>
     </net>
     <net code="18" name="/ESP_A_P22">
-      <node ref="J1" pin="16" pinfunction="Pin_16" pintype="passive"/>
+      <node ref="J3" pin="14" pinfunction="Pin_14" pintype="passive"/>
       <node ref="U1" pin="22" pinfunction="SDI/SD1" pintype="bidirectional"/>
     </net>
     <net code="19" name="/ESP_A_P23">
-      <node ref="J1" pin="17" pinfunction="Pin_17" pintype="passive"/>
+      <node ref="J3" pin="16" pinfunction="Pin_16" pintype="passive"/>
+      <node ref="JP1" pin="1" pinfunction="A" pintype="passive"/>
       <node ref="U1" pin="23" pinfunction="IO15" pintype="bidirectional"/>
     </net>
     <net code="20" name="/ESP_A_P26">
-      <node ref="J1" pin="18" pinfunction="Pin_18" pintype="passive"/>
+      <node ref="J3" pin="18" pinfunction="Pin_18" pintype="passive"/>
       <node ref="U1" pin="26" pinfunction="IO4" pintype="bidirectional"/>
     </net>
     <net code="21" name="/ESP_A_P28">
-      <node ref="J1" pin="19" pinfunction="Pin_19" pintype="passive"/>
+      <node ref="J3" pin="20" pinfunction="Pin_20" pintype="passive"/>
       <node ref="U1" pin="28" pinfunction="IO17" pintype="bidirectional"/>
     </net>
     <net code="22" name="/ESP_A_P29">
-      <node ref="J1" pin="20" pinfunction="Pin_20" pintype="passive"/>
+      <node ref="J3" pin="22" pinfunction="Pin_22" pintype="passive"/>
       <node ref="U1" pin="29" pinfunction="IO5" pintype="bidirectional"/>
     </net>
     <net code="23" name="/ESP_EN">
+      <node ref="C2" pin="1" pintype="passive"/>
       <node ref="Q5" pin="3" pinfunction="C" pintype="passive"/>
       <node ref="R7" pin="1" pintype="passive"/>
       <node ref="U1" pin="3" pinfunction="EN" pintype="input"/>
@@ -1504,7 +1617,8 @@
       <node ref="C15" pin="1" pintype="passive"/>
       <node ref="C16" pin="1" pintype="passive"/>
       <node ref="C17" pin="1" pintype="passive"/>
-      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="C18" pin="1" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
       <node ref="C3" pin="1" pintype="passive"/>
       <node ref="C4" pin="1" pintype="passive"/>
       <node ref="C5" pin="1" pintype="passive"/>
@@ -1531,11 +1645,14 @@
       <node ref="D7" pin="1" pinfunction="VSS" pintype="power_in"/>
       <node ref="D8" pin="1" pinfunction="VSS" pintype="power_in"/>
       <node ref="D9" pin="1" pinfunction="VSS" pintype="power_in"/>
+      <node ref="J3" pin="2" pinfunction="Pin_2" pintype="passive"/>
+      <node ref="J3" pin="24" pinfunction="Pin_24" pintype="passive"/>
       <node ref="J6" pin="2" pinfunction="Pin_2" pintype="passive"/>
       <node ref="J7" pin="2" pinfunction="Pin_2" pintype="passive"/>
       <node ref="J8" pin="2" pinfunction="Pin_2" pintype="passive"/>
       <node ref="J9" pin="5" pinfunction="GND" pintype="power_out"/>
       <node ref="J9" pin="6" pinfunction="Shield" pintype="passive"/>
+      <node ref="JP1" pin="2" pinfunction="B" pintype="passive"/>
       <node ref="Q2" pin="2" pinfunction="S" pintype="passive"/>
       <node ref="Q4" pin="2" pinfunction="S" pintype="passive"/>
       <node ref="RN1" pin="1" pinfunction="R1.1" pintype="passive"/>
@@ -1624,16 +1741,16 @@
       <node ref="D19" pin="2" pinfunction="A" pintype="passive"/>
       <node ref="R6" pin="2" pintype="passive"/>
     </net>
-    <net code="56" name="Net-(J2-Pad2)">
-      <node ref="J2" pin="2" pinfunction="Pin_2" pintype="passive"/>
+    <net code="56" name="Net-(J1-Pad2)">
+      <node ref="J1" pin="2" pinfunction="Pin_2" pintype="passive"/>
       <node ref="Q2" pin="3" pinfunction="D" pintype="passive"/>
     </net>
-    <net code="57" name="Net-(J3-Pad1)">
-      <node ref="J3" pin="1" pinfunction="Pin_1" pintype="passive"/>
+    <net code="57" name="Net-(J2-Pad1)">
+      <node ref="J2" pin="1" pinfunction="Pin_1" pintype="passive"/>
       <node ref="Q1" pin="3" pinfunction="D" pintype="passive"/>
     </net>
-    <net code="58" name="Net-(J3-Pad2)">
-      <node ref="J3" pin="2" pinfunction="Pin_2" pintype="passive"/>
+    <net code="58" name="Net-(J2-Pad2)">
+      <node ref="J2" pin="2" pinfunction="Pin_2" pintype="passive"/>
       <node ref="Q1" pin="2" pinfunction="S" pintype="passive"/>
     </net>
     <net code="59" name="Net-(J4-Pad2)">
