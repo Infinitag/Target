@@ -14,15 +14,6 @@ The target has the following functions:
 
 
 
-## Hardware
-
-We have published all files for the PCB incl. schematic, PCB design and BOM here:
-
-https://oshwlab.com/crusher/infinitag-target
-
-
-
-
 ## Software
 
 In the "ArduinoCode" directory is the source code as .ino file for the Arduino IDE to upload to the taget board.
@@ -47,6 +38,24 @@ If not, install the appropriate driver, so that the Arduino IDE recognizes the t
 
 The following must be selected as the board for the upload:
 ESP32 Arduino > ESP32 S3 Dev Module
+
+
+
+## Hardware
+
+### PCB
+
+We have published all files for the PCB incl. schematic, PCB design and BOM here:
+
+https://oshwlab.com/crusher/infinitag-target
+
+### 3D files
+
+The files for a 3D enclosure can be found in the folder "Hardware/3DFiles".
+
+Additionally you can find the latest version under the following link:
+
+https://a360.co/3NOv182
 
 
 
