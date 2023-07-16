@@ -1,183 +1,353 @@
+/**
+ * Infinitag Target
+ * 
+ * An ESP32 S3 based lasertag target with
+ * RGBW LEDs and 5V + 3,3V + relay switches
+ * 
+ * @author Tobias Stewen
+ * @version 3.1.0
+ * @license CC BY-NC-SA 4.0
+ * @url https://github.com/Infinitag/Target
+ */
 
-#include <Arduino.h>
-#include <stdlib.h>
-
-#define LED_BUILTIN 2 // Fix for IRRemote lib warning
-#define SEND_PWM_BY_TIMER // Fix for IRRemote lib warning
-
-// Wifi
-#include <WiFiManager.h>
-WiFiManager wm;
-int cpTimeout = 90; // Timeout for the configuration portal
-WiFiManagerParameter custom_led_delay("led_delay", "LED delay", "", 10);
-
-// Core
+// Includes
+#include <arduino-timer.h>
+#include <Adafruit_NeoPixel.h>
+#include <HTTPClient.h>
 #include <Infinitag_Core.h>
+#include <IRremote.hpp>
+#include <WiFiManager.h>
+#include <Preferences.h>
+
+// Timer SetUp
+auto timer = timer_create_default();
+
+// Infinitag
 Infinitag_Core infinitagCore;
 
-// WifiManager configuration portal button
-#define BTN_CP_START 17
-int buttonState = 0;
+// Wifi Manager
+WiFiManager wm;
+int wifiConfigurationPortalTimeout = 60;
+char wifiName[32] = "InfinitagTarget";
+char wifiPassword[32] = "YourDefaultPassword";
+WiFiManagerParameter custom_sound_id("sound_id", "Sound ID", "", 3);
+WiFiManagerParameter custom_hit_time("hit_time", "Hit Time", "", 10);
 
-// IR
-#define DECODE_RC5
-#include <IRremote.hpp>
-#define IR_RECEIVE_PIN 16
-IRrecv irrecv(IR_RECEIVE_PIN);
-decode_results results;
+// HTTP Client
+HTTPClient http;
+unsigned long freeUpResourcesTime = 300000;
+bool sendHttpReq = false;
+int ipBlock;
 
-// LED
-#include <Adafruit_NeoPixel.h>
-#define LED_PIN     18
+// LEDs
+#define LED_PIN  38
 #define LED_COUNT  12
 #define BRIGHTNESS 255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
-// Switches
-#define SW_1     19
-#define SW_2     21
-#define SW_3     22
-#define SW_4     23
+// Infrared
+#define IR_PIN 15
 
-// Color Settings
-int ledColorWifiReboot[4] = {0, 0, 0, 255};
-int ledColorWifiWait[4] = {255, 255, 0, 0};
-int ledColorIdle[4] = {255, 0, 255, 0};
-int ledColorHit[4] = {255, 0, 0, 0};
-int ledColorMissHit[4] = {0, 255, 255, 0};
+// Switches
+const int swPin = 21;
+const int sw5VPin = 46;
+const int sw33VPin = 48;
+
+// Config
+Preferences preferences;
+
+// Sound
+int soundId = 0;
+int hitTime = 0;
+int defaultHitTime = 10000;
+
+// Animation
+unsigned long animationPreviousMillis = 0;
+unsigned long animationInterval = 10;
+long animationStep = 0;
 
 // General
-bool targetHit = false;
-#define TEST_LED_PIN 2
+bool hit = false;
+unsigned long timeOfHit = 0;
 
+// Target Setup
 void setup() {
-  // Disable Log to prevent Serial Log
-  wm.setDebugOutput(false); 
+  // Serial
+  Serial.begin(115200);
 
-  // Test blink 
-  pinMode(TEST_LED_PIN, OUTPUT);
-  digitalWrite(TEST_LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(TEST_LED_PIN, LOW);
+  loadConfig();
+
+  setupWifi();
+  setupHttpClient();
+  setupSwitches();
+  setupIr();
+  setupLeds();
+  setupAnimationLoop();
+}
+
+// Main loop on main core
+void loop() {
+  while (true){
+    // Check for IR signal
+    checkIrData();
+  }
+}
+
+// Animation loop on separated core
+void loopAnimation (void* pvParameters) {
+  // Initial enable the target
+  enableTarget();
+
+  //Continuously free up resources from Http cliet
+  timer.every(freeUpResourcesTime, httpFreeResourceTimer);
+
+  while (true){
+    // Timer loop function
+    timer.tick();
+
+    // Check if next animation step is reached
+    if ((unsigned long)(millis() - animationPreviousMillis) >= animationInterval) {
+      // Set curret millis as previous step time
+      animationPreviousMillis = millis();
+
+      // Check which animation must be played
+      if (hit) {
+        // Hit animation
+        animationHit();
+      } else {
+        // Idle animation
+        rainbow();
+      }
+    }
+  }
+}
+
+// Enable the Target for hits
+void enableTarget() {
+  // Deactivate switches
+  digitalWrite(swPin, LOW);
+  digitalWrite(sw5VPin, LOW);
+  digitalWrite(sw33VPin, LOW);
+
+  // Reset the animation with 10 millis delay for rainbow animation
+  resetAnimation(10);
+
+  // Reset hit var
+  hit = false;
+}
+
+// Change target to hit state
+void targetHit() {
+  // Set hit var
+  hit = true;
+
+  // Set time of hit
+  timeOfHit = millis();
+
+  // Enable switches
+  digitalWrite(swPin, HIGH);
+  digitalWrite(sw5VPin, HIGH);
+  digitalWrite(sw33VPin, HIGH);
+
+  // Reset the animation with 80 millis delay for hit animation
+  resetAnimation(80);
+}
+
+// Load previous saved parameters
+void loadConfig() {
+  // Open preferences
+  preferences.begin("target-data", true);
+
+  // Load sound id
+  soundId = preferences.getUInt("soundid", 1);
   
-  // Wifi - 1
-  WiFi.mode(WIFI_STA);
+  // Load hit time
+  hitTime = preferences.getUInt("hittime", defaultHitTime);
 
-  // Set configuration portal PIN
-  pinMode(BTN_CP_START, INPUT);
+  // Close preferences
+  preferences.end();
+}
 
-  // Set Switch Pins
-  pinMode(SW_1, OUTPUT);
-  pinMode(SW_2, OUTPUT);
-  pinMode(SW_3, OUTPUT);
-  pinMode(SW_4, OUTPUT);
+// Check if IR was received
+void checkIrData() {
+  // IR Reveiced? Yes, then decode the signal
+  if (IrReceiver.decode()) {
+      // Decode the infinitag protocol
+      if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
 
-  // Custom configuration
-  wm.addParameter(&custom_led_delay);
+        // Set Hit
+        targetHit();
 
-  // Set the default value for the custom field
-  custom_led_delay.setValue("1000",4);
+        // Set timer to reactivate target after hit time
+        timer.in(hitTime, enableTargetTimer);
+
+        // Extract IP block from infinitag signal and
+        // call origins api for a sound effect
+        // with the sound id of this target
+        ipBlock = infinitagCore.irRecvCmdValue;
+        String serverPath = "http://192.168.1.";
+        serverPath.concat(ipBlock);
+        serverPath.concat(":8080/trigger_effect?sound=");
+        serverPath.concat(soundId);
+        Serial.println(serverPath);
+        http.begin(serverPath.c_str());
+        int httpResponseCode = http.GET();
+
+        // Output error only for debug
+        if (!httpResponseCode>0) {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+        }
+
+      }
+
+      // Enable receiving of the next value
+      IrReceiver.resume(); 
+  }
+}
+
+// Timer function for reactivating the target
+bool enableTargetTimer(void *) {
+  enableTarget();
+
+  return true;
+}
+
+// Function to free uo Http client ressources
+bool httpFreeResourceTimer(void *) {
+  // Free resources
+  http.end();
+
+  return true;
+}
+
+// Setup for Wifi
+void setupWifi() {
+  // Add Customparameter and set default value
+  wm.addParameter(&custom_sound_id);
+
+  // Custom-Param: Sound ID
+  char tmpCharSoundId[3];
+  itoa(soundId, tmpCharSoundId, 10);
+  custom_sound_id.setValue(tmpCharSoundId, 3);
+
+  // Custom-Param: Hit time
+  wm.addParameter(&custom_hit_time);
+  char tmpCharHitTime[10];
+  itoa(hitTime, tmpCharHitTime, 10);
+  custom_hit_time.setValue(tmpCharHitTime, 10);
 
   // Custom menu
   // Added param for custom configuration
   // Added exit to start loop after configuration
-  std::vector<const char *> menu = {"wifi","info","param","close","sep","update","exit"}; // Added param to the menu
-  wm.setMenu(menu); // custom menu, pass vector
-  wm.setHostname("InfinitagTarget_1");
-  
-  // LED
+  std::vector<const char *> menu = {"wifi","info","param","close","sep","update","exit"};
+  wm.setMenu(menu);
+
+  // Setup Callback to save custom params
+  wm.setSaveParamsCallback(saveWifiParamsCallback);
+
+  // Init Wifi
+  bool res;
+  res = wm.autoConnect(wifiName, wifiPassword);
+  if(!res) {
+    ESP.restart();
+  }
+}
+
+// Setup Http Client
+void setupHttpClient() {
+  // Set Reuse to reduce latancy 
+  http.setReuse(true);
+}
+
+// Setup Switches
+void setupSwitches() {
+  pinMode(swPin, OUTPUT);
+  pinMode(sw5VPin, OUTPUT);
+  pinMode(sw33VPin, OUTPUT);
+}
+
+// Setup Infrared
+void setupIr() {
+  IrReceiver.begin(IR_PIN, false);
+}
+
+// Setup LEDs
+void setupLeds() {
   strip.begin();
   strip.show();
   strip.setBrightness(BRIGHTNESS);
-  ledShowSetup();
+}
 
-  // Wifi - 2
-  //wm.resetSettings(); // Only for Develop - Remove after
-  // Auto Connect
-  if (!wm.autoConnect("InfinitagTarget_1","12345678")) {
+// Setup animation loop
+void setupAnimationLoop() {
+  xTaskCreatePinnedToCore (
+  loopAnimation,      // Function to implement the task
+    "loopAnimation",  // Name of the task
+    10000,            // Stack size in bytes
+    NULL,             // Task input parameter
+    1,                // Priority of the task
+    NULL,             // Task handle.
+    1                 // Core where the task should run
+  );
+}
+
+// Callback for Wifi to save custom params
+void saveWifiParamsCallback () {
+  // Open the storage
+  preferences.begin("target-data", false);
+
+  // Get, convert and save: Sound ID
+  int newSoundId = atoi(custom_sound_id.getValue());
+  soundId = newSoundId;
+  preferences.putUInt("soundid", soundId);
+
+  // Get, convert and save: Hit time
+  int newHitTime = atoi(custom_hit_time.getValue());
+  hitTime = newHitTime;
+  preferences.putUInt("hittime", hitTime);
+
+  // Close storage
+  preferences.end();
+
+  // Close Config portal
+  wm.stopConfigPortal();
+}
+
+// Helper function to set all LEDs to one color
+void setColor(uint32_t color) {
+  for(int i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, color);
   }
-    
-  // IR
-  irrecv.enableIRIn();
-
-  // General 
-  targetHit = false;
-}
-
-void loop() {
-  irDecode();
-
-  configPortalButton();
-  
-  if (targetHit) {
-    targetHitLoop();
-  } else {
-    targetNotHitLoop();
-  }
-}
-
-void targetNotHitLoop() {
-  setAllSwitches(LOW);
-  ledFillFull(ledColorIdle);
-}
-
-void targetHitLoop() {
-  setAllSwitches(HIGH);
-  
-  ledFillFull(ledColorHit);
-  
-  targetHit = false;
-  delay(1000);
-  IrReceiver.resume();
-}
-
-void setAllSwitches(int state) {
-  digitalWrite(SW_1, state);
-  digitalWrite(SW_2, state);
-  digitalWrite(SW_3, state);
-  digitalWrite(SW_4, state);
-}
-
-void configPortalButton() {
-  buttonState = digitalRead(BTN_CP_START);
-
-  if (buttonState == HIGH) {
-    ledShowSetup();
-    wm.setConfigPortalTimeout(cpTimeout);
-    wm.startConfigPortal("WM_ConnectAP","12345678");
-  }
-}
-
-void irDecode() {
-  // IR signal received?
-  if (IrReceiver.decode()) {
-    
-    // Is the IR signal a Infinitag signal?
-    if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
-      
-      // Validate all required Infinitag parameters for a valid hit
-      if (infinitagCore.irRecvIsSystem == false && infinitagCore.irRecvGameId == 0
-        && infinitagCore.irRecvTeamId == 0 && infinitagCore.irRecvPlayerId == 0
-        && infinitagCore.irRecvCmd == 1 && infinitagCore.irRecvCmdValue == 255) {
-          targetHit = true;
-      }
-    } else {
-      ledFillFull(ledColorMissHit);
-      delay(150);
-      strip.clear();
-    }
-    
-    IrReceiver.resume();
-  }
-}
-
-void ledShowSetup() {
-  ledFillFull(ledColorWifiReboot);
-  delay(150);
-  ledFillFull(ledColorWifiWait);
-}
-
-void ledFillFull(int color[]) {
-  strip.fill(strip.Color(color[0], color[1], color[2], color[3]));
   strip.show();
+}
+
+// Reset the LED animation with a delay intervall
+void resetAnimation(int interval) {
+  animationPreviousMillis = millis();
+  animationStep = 0;
+  animationInterval = interval;
+}
+
+// LED animation for the rainbow
+void rainbow() {
+  strip.rainbow(animationStep);
+  strip.show();
+
+  animationStep = (animationStep < 65536) ? (animationStep + 256) : 0;
+}
+
+// LED animation for a hit
+void animationHit() {
+  strip.clear();
+  int distance;
+  long maxBrightness = map(millis(), timeOfHit, (timeOfHit + hitTime), 0, 255);
+  
+  for(int i=0; i<strip.numPixels(); i++) {
+    distance = (i <= animationStep) ? (animationStep - i) : (strip.numPixels() - i + animationStep);
+    strip.setPixelColor(i, strip.Color(map(distance, 0, 11, maxBrightness, 0), 0, 0, 0));
+  }
+  strip.show();
+
+  animationStep = (animationStep < 11) ? (animationStep + 1) : 0;
 }
