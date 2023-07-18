@@ -172,33 +172,36 @@ void loadConfig() {
 void checkIrData() {
   // IR Reveiced? Yes, then decode the signal
   if (IrReceiver.decode()) {
-      // Decode the infinitag protocol
-      if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
+    // If hit = true > No action
+    if (!hit) {
+        // Decode the infinitag protocol
+        if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
 
-        // Set Hit
-        targetHit();
+          // Set Hit
+          targetHit();
 
-        // Set timer to reactivate target after hit time
-        timer.in(hitTime, enableTargetTimer);
+          // Set timer to reactivate target after hit time
+          timer.in(hitTime, enableTargetTimer);
 
-        // Extract IP block from infinitag signal and
-        // call origins api for a sound effect
-        // with the sound id of this target
-        ipBlock = infinitagCore.irRecvCmdValue;
-        String serverPath = "http://192.168.1.";
-        serverPath.concat(ipBlock);
-        serverPath.concat(":8080/trigger_effect?sound=");
-        serverPath.concat(soundId);
-        Serial.println(serverPath);
-        http.begin(serverPath.c_str());
-        int httpResponseCode = http.GET();
+          // Extract IP block from infinitag signal and
+          // call origins api for a sound effect
+          // with the sound id of this target
+          ipBlock = infinitagCore.irRecvCmdValue;
+          String serverPath = "http://192.168.1.";
+          serverPath.concat(ipBlock);
+          serverPath.concat(":8080/trigger_effect?sound=");
+          serverPath.concat(soundId);
+          Serial.println(serverPath);
+          http.begin(serverPath.c_str());
+          int httpResponseCode = http.GET();
 
-        // Output error only for debug
-        if (!httpResponseCode>0) {
-          Serial.print("Error code: ");
-          Serial.println(httpResponseCode);
+          // Output error only for debug
+          if (!httpResponseCode>0) {
+            Serial.print("Error code: ");
+            Serial.println(httpResponseCode);
+          }
+
         }
-
       }
 
       // Enable receiving of the next value
