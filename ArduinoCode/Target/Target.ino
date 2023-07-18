@@ -5,7 +5,7 @@
  * RGBW LEDs and 5V + 3,3V + relay switches
  * 
  * @author Tobias Stewen
- * @version 3.1.0
+ * @version 3.0.0
  * @license CC BY-NC-SA 4.0
  * @url https://github.com/Infinitag/Target
  */
