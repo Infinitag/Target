@@ -174,38 +174,54 @@ void checkIrData() {
   if (IrReceiver.decode()) {
     // If hit = true > No action
     if (!hit) {
-        // Decode the infinitag protocol
-        if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
+      // Decode the infinitag protocol
+      if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
+        // No System + Command 1 = Hit
+        if (infinitagCore.irRecvIsSystem == false && infinitagCore.irRecvCmd == 1) {
+          hitAction();
 
-          // Set Hit
-          targetHit();
-
-          // Set timer to reactivate target after hit time
-          timer.in(hitTime, enableTargetTimer);
-
-          // Extract IP block from infinitag signal and
-          // call origins api for a sound effect
-          // with the sound id of this target
-          ipBlock = infinitagCore.irRecvCmdValue;
-          String serverPath = "http://192.168.1.";
-          serverPath.concat(ipBlock);
-          serverPath.concat(":8080/trigger_effect?sound=");
-          serverPath.concat(soundId);
-          Serial.println(serverPath);
-          http.begin(serverPath.c_str());
-          int httpResponseCode = http.GET();
-
-          // Output error only for debug
-          if (!httpResponseCode>0) {
-            Serial.print("Error code: ");
-            Serial.println(httpResponseCode);
-          }
-
+        // System + Command 1 = Open Config Menu
+        } else if(infinitagCore.irRecvIsSystem == true && infinitagCore.irRecvCmd == 1) {
+          openConfigPortalAction();
         }
       }
+    }
 
-      // Enable receiving of the next value
-      IrReceiver.resume(); 
+    // Enable receiving of the next value
+    IrReceiver.resume(); 
+  }
+}
+
+// Action to activate config portal
+void openConfigPortalAction() {
+  wm.setConfigPortalTimeout(wifiConfigurationPortalTimeout);
+  wm.startConfigPortal(wifiName, wifiPassword);
+}
+
+// Action for a hit
+void hitAction() {
+  // Set Hit
+  targetHit();
+
+  // Set timer to reactivate target after hit time
+  timer.in(hitTime, enableTargetTimer);
+
+  // Extract IP block from infinitag signal and
+  // call origins api for a sound effect
+  // with the sound id of this target
+  ipBlock = infinitagCore.irRecvCmdValue;
+  String serverPath = "http://192.168.1.";
+  serverPath.concat(ipBlock);
+  serverPath.concat(":8080/trigger_effect?sound=");
+  serverPath.concat(soundId);
+  Serial.println(serverPath);
+  http.begin(serverPath.c_str());
+  int httpResponseCode = http.GET();
+
+  // Output error only for debug
+  if (!httpResponseCode>0) {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
   }
 }
 
