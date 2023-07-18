@@ -40,18 +40,18 @@ bool sendHttpReq = false;
 int ipBlock;
 
 // LEDs
-#define LED_PIN  38
-#define LED_COUNT  12
-#define BRIGHTNESS 255
+#define LED_PIN     38
+#define LED_COUNT   12
+#define BRIGHTNESS  255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
 // Infrared
 #define IR_PIN 15
 
 // Switches
-const int swPin = 21;
-const int sw5VPin = 46;
-const int sw33VPin = 48;
+#define SW_PIN      21
+#define SW_5V_PIN   46
+#define SW_33V_PIN  48
 
 // Config
 Preferences preferences;
@@ -125,9 +125,9 @@ void loopAnimation (void* pvParameters) {
 // Enable the Target for hits
 void enableTarget() {
   // Deactivate switches
-  digitalWrite(swPin, LOW);
-  digitalWrite(sw5VPin, LOW);
-  digitalWrite(sw33VPin, LOW);
+  digitalWrite(SW_PIN, LOW);
+  digitalWrite(SW_5V_PIN, LOW);
+  digitalWrite(SW_33V_PIN, LOW);
 
   // Reset the animation with 10 millis delay for rainbow animation
   resetAnimation(10);
@@ -145,9 +145,9 @@ void targetHit() {
   timeOfHit = millis();
 
   // Enable switches
-  digitalWrite(swPin, HIGH);
-  digitalWrite(sw5VPin, HIGH);
-  digitalWrite(sw33VPin, HIGH);
+  digitalWrite(SW_PIN, HIGH);
+  digitalWrite(SW_5V_PIN, HIGH);
+  digitalWrite(SW_33V_PIN, HIGH);
 
   // Reset the animation with 80 millis delay for hit animation
   resetAnimation(80);
@@ -281,9 +281,9 @@ void setupHttpClient() {
 
 // Setup Switches
 void setupSwitches() {
-  pinMode(swPin, OUTPUT);
-  pinMode(sw5VPin, OUTPUT);
-  pinMode(sw33VPin, OUTPUT);
+  pinMode(SW_PIN, OUTPUT);
+  pinMode(SW_5V_PIN, OUTPUT);
+  pinMode(SW_33V_PIN, OUTPUT);
 }
 
 // Setup Infrared
