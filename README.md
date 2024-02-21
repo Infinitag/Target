@@ -41,6 +41,13 @@ ESP32 Arduino > ESP32 S3 Dev Module
 
 
 
+### Libraries
+
+- esp32 by Espressif Systems v 2.0.11 (3.0.0 not working with IRremote)
+- IRremote by shirriff v 4.2.0
+
+
+
 ## Hardware
 
 ### PCB
