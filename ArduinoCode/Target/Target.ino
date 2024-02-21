@@ -13,17 +13,15 @@
 // Includes
 #include <arduino-timer.h>
 #include <Adafruit_NeoPixel.h>
-#include <HTTPClient.h>
-#include <Infinitag_Core.h>
 #include <IRremote.hpp>
+#include <WiFi.h>
+#include <WiFiClient.h>
 #include <WiFiManager.h>
 #include <Preferences.h>
+#include <PubSubClient.h>
 
 // Timer SetUp
 auto timer = timer_create_default();
-
-// Infinitag
-Infinitag_Core infinitagCore;
 
 // Wifi Manager
 WiFiManager wm;
@@ -33,10 +31,10 @@ char wifiPassword[32] = "YourDefaultPassword";
 WiFiManagerParameter custom_sound_id("sound_id", "Sound ID", "", 3);
 WiFiManagerParameter custom_hit_time("hit_time", "Hit Time", "", 10);
 
-// HTTP Client
-HTTPClient http;
-unsigned long freeUpResourcesTime = 300000;
-bool sendHttpReq = false;
+// MQTT
+WiFiClient espClient;
+const char* mqtt_server = "192.168.178.241";
+PubSubClient mqttClient(espClient);
 int ipBlock;
 
 // LEDs
@@ -78,16 +76,22 @@ void setup() {
   loadConfig();
 
   setupWifi();
-  setupHttpClient();
   setupSwitches();
   setupIr();
   setupLeds();
   setupAnimationLoop();
+
+  mqttClient.setServer(mqtt_server, 1883);
 }
 
 // Main loop on main core
 void loop() {
   while (true){
+    if (!mqttClient.connected()) {
+      mqttReconnect();
+    }
+    mqttClient.loop();
+
     // Check for IR signal
     checkIrData();
   }
@@ -97,9 +101,6 @@ void loop() {
 void loopAnimation (void* pvParameters) {
   // Initial enable the target
   enableTarget();
-
-  //Continuously free up resources from Http cliet
-  timer.every(freeUpResourcesTime, httpFreeResourceTimer);
 
   while (true){
     // Timer loop function
@@ -174,16 +175,20 @@ void checkIrData() {
   if (IrReceiver.decode()) {
     // If hit = true > No action
     if (!hit) {
-      // Decode the infinitag protocol
-      if (infinitagCore.irDecode(IrReceiver.decodedIRData.decodedRawData)) {
-        // No System + Command 1 = Hit
-        if (infinitagCore.irRecvIsSystem == false && infinitagCore.irRecvCmd == 1) {
-          hitAction();
+      // Decode the ir signal
+      uint8_t ipBlock3;
+      uint8_t ipBlock4;
+      uint8_t command;
+      uint8_t value;
+      irDecode(IrReceiver.decodedIRData.decodedRawData, ipBlock3, ipBlock4, command, value);
 
-        // System + Command 1 = Open Config Menu
-        } else if(infinitagCore.irRecvIsSystem == true && infinitagCore.irRecvCmd == 1) {
-          openConfigPortalAction();
-        }
+      // Command = 1 and Value = 1 == Shot
+      if (command == 1 && value == 1) {
+        hitAction(ipBlock3, ipBlock4);
+
+      // Command = 2 and Value = 1 == Open config portal
+      } else if(command == 2 && value == 1) {
+        openConfigPortalAction();
       }
     }
 
@@ -199,43 +204,27 @@ void openConfigPortalAction() {
 }
 
 // Action for a hit
-void hitAction() {
+void hitAction(uint8_t ipBlock3, uint8_t ipBlock4) {
   // Set Hit
   targetHit();
 
   // Set timer to reactivate target after hit time
   timer.in(hitTime, enableTargetTimer);
 
-  // Extract IP block from infinitag signal and
-  // call origins api for a sound effect
-  // with the sound id of this target
-  ipBlock = infinitagCore.irRecvCmdValue;
-  String serverPath = "http://192.168.1.";
-  serverPath.concat(ipBlock);
-  serverPath.concat(":8080/trigger_effect?sound=");
-  serverPath.concat(soundId);
-  Serial.println(serverPath);
-  http.begin(serverPath.c_str());
-  int httpResponseCode = http.GET();
+  String topic = "WandStations/";
+  topic += String(ipBlock3);
+  topic += "-";
+  topic += String(ipBlock4);
 
-  // Output error only for debug
-  if (!httpResponseCode>0) {
-    Serial.print("Error code: ");
-    Serial.println(httpResponseCode);
-  }
+  String topicValue = "PlaySound:";
+  topicValue += String(soundId);
+  
+  mqttClient.publish(topic.c_str(), topicValue.c_str());
 }
 
 // Timer function for reactivating the target
 bool enableTargetTimer(void *) {
   enableTarget();
-
-  return true;
-}
-
-// Function to free uo Http client ressources
-bool httpFreeResourceTimer(void *) {
-  // Free resources
-  http.end();
 
   return true;
 }
@@ -271,12 +260,6 @@ void setupWifi() {
   if(!res) {
     ESP.restart();
   }
-}
-
-// Setup Http Client
-void setupHttpClient() {
-  // Set Reuse to reduce latancy 
-  http.setReuse(true);
 }
 
 // Setup Switches
@@ -369,4 +352,29 @@ void animationHit() {
   strip.show();
 
   animationStep = (animationStep < 11) ? (animationStep + 1) : 0;
+}
+
+void mqttReconnect() {
+  while (!mqttClient.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    String clientId = "ESP32Client-";
+    clientId += String(random(0xffff), HEX);
+
+    if (mqttClient.connect(clientId.c_str())) {
+      Serial.println("connected");
+      //mqttClient.publish("WandStations/All", topic.c_str());
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(" try again in 5 seconds");
+      delay(5000);
+    }
+  }
+}
+
+void irDecode(uint32_t irData, uint8_t &ipBlock3, uint8_t &ipBlock4, uint8_t &command, uint8_t &value){
+  ipBlock3 = irData >> 24;
+  ipBlock4 = irData << 8 >> 24;
+  command = irData << 16 >> 24;
+  value = irData << 24 >> 24;
 }
