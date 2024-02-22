@@ -31,12 +31,14 @@ char wifiName[32] = "InfinitagTarget";
 char wifiPassword[32] = "YourDefaultPassword";
 WiFiManagerParameter custom_sound_id("sound_id", "Sound ID", "", 3);
 WiFiManagerParameter custom_hit_time("hit_time", "Hit Time", "", 10);
+WiFiManagerParameter custom_mqtt_server("mqtt_server", "MQTT Server", "", 40);
+WiFiManagerParameter custom_mqtt_port("mqtt_port", "MQTT Port", "", 6);
 
 // MQTT
 WiFiClient espClient;
-const char *mqtt_server = "192.168.178.241";
 PubSubClient mqttClient(espClient);
-int ipBlock;
+String mqttServer;
+int mqttPort;
 
 // LEDs
 #define LED_PIN 38
@@ -70,7 +72,7 @@ bool hit = false;
 unsigned long timeOfHit = 0;
 
 // Declarations
-void loopAnimation(void);
+void loopAnimation(void *);
 void enableTarget();
 void targetHit();
 void loadConfig();
@@ -104,7 +106,7 @@ void setup() {
   setupLeds();
   setupAnimationLoop();
 
-  mqttClient.setServer(mqtt_server, 1883);
+  mqttClient.setServer(mqttServer.c_str(), mqttPort);
 }
 
 // Main loop on main core
@@ -189,6 +191,12 @@ void loadConfig() {
   // Load hit time
   hitTime = preferences.getUInt("hittime", defaultHitTime);
 
+  // Load MQTT Server
+  mqttServer = preferences.getString("mqttserver", "192.168.0.1");
+
+  // Load MQTT Port
+  mqttPort = preferences.getUInt("mqttport", 1883);
+
   // Close preferences
   preferences.end();
 }
@@ -258,6 +266,9 @@ bool enableTargetTimer(void *) {
 void setupWifi() {
   // Add Customparameter and set default value
   wm.addParameter(&custom_sound_id);
+  wm.addParameter(&custom_hit_time);
+  wm.addParameter(&custom_mqtt_server);
+  wm.addParameter(&custom_mqtt_port);
 
   // Custom-Param: Sound ID
   char tmpCharSoundId[3];
@@ -265,10 +276,17 @@ void setupWifi() {
   custom_sound_id.setValue(tmpCharSoundId, 3);
 
   // Custom-Param: Hit time
-  wm.addParameter(&custom_hit_time);
   char tmpCharHitTime[10];
   itoa(hitTime, tmpCharHitTime, 10);
   custom_hit_time.setValue(tmpCharHitTime, 10);
+
+  // Custom-Param: MQTT Server
+  custom_mqtt_port.setValue(mqttServer.c_str(), 40);
+
+  // Custom-Param: MQTT Port
+  char tmpCharMqttPort[6];
+  itoa(mqttPort, tmpCharMqttPort, 6);
+  custom_mqtt_port.setValue(tmpCharMqttPort, 6);
 
   // Custom menu
   // Added param for custom configuration
