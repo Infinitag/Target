@@ -21,7 +21,6 @@
 #include <WiFiManager.h>
 #include <arduino-timer.h>
 
-
 // Timer SetUp
 auto timer = timer_create_default();
 
@@ -78,7 +77,7 @@ void loadConfig();
 void checkIrData();
 void openConfigPortalAction();
 void hitAction(uint8_t, uint8_t);
-bool enableTargetTimer(void);
+bool enableTargetTimer(void *);
 void setupWifi();
 void setupSwitches();
 void setupIr();
@@ -90,7 +89,7 @@ void resetAnimation(int);
 void rainbow();
 void animationHit();
 void mqttReconnect();
-void irDecode(uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
+void irDecode(uint32_t, uint8_t &, uint8_t &, uint8_t &, uint8_t &);
 
 // Target Setup
 void setup() {
