@@ -1,9 +1,9 @@
 /**
  * Infinitag Target
- * 
+ *
  * An ESP32 S3 based lasertag target with
  * RGBW LEDs and 5V + 3,3V + relay switches
- * 
+ *
  * @author Tobias Stewen
  * @version 3.0.0
  * @license CC BY-NC-SA 4.0
@@ -11,14 +11,14 @@
  */
 
 // Includes
-#include <arduino-timer.h>
 #include <Adafruit_NeoPixel.h>
 #include <IRremote.hpp>
+#include <Preferences.h>
+#include <PubSubClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WiFiManager.h>
-#include <Preferences.h>
-#include <PubSubClient.h>
+#include <arduino-timer.h>
 
 // Timer SetUp
 auto timer = timer_create_default();
@@ -33,23 +33,23 @@ WiFiManagerParameter custom_hit_time("hit_time", "Hit Time", "", 10);
 
 // MQTT
 WiFiClient espClient;
-const char* mqtt_server = "192.168.178.241";
+const char *mqtt_server = "192.168.178.241";
 PubSubClient mqttClient(espClient);
 int ipBlock;
 
 // LEDs
-#define LED_PIN     38
-#define LED_COUNT   12
-#define BRIGHTNESS  255
+#define LED_PIN 38
+#define LED_COUNT 12
+#define BRIGHTNESS 255
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
 // Infrared
 #define IR_PIN 15
 
 // Switches
-#define SW_PIN      21
-#define SW_5V_PIN   46
-#define SW_33V_PIN  48
+#define SW_PIN 21
+#define SW_5V_PIN 46
+#define SW_33V_PIN 48
 
 // Config
 Preferences preferences;
@@ -86,7 +86,7 @@ void setup() {
 
 // Main loop on main core
 void loop() {
-  while (true){
+  while (true) {
     if (!mqttClient.connected()) {
       mqttReconnect();
     }
@@ -98,16 +98,17 @@ void loop() {
 }
 
 // Animation loop on separated core
-void loopAnimation (void* pvParameters) {
+void loopAnimation(void *pvParameters) {
   // Initial enable the target
   enableTarget();
 
-  while (true){
+  while (true) {
     // Timer loop function
     timer.tick();
 
     // Check if next animation step is reached
-    if ((unsigned long)(millis() - animationPreviousMillis) >= animationInterval) {
+    if ((unsigned long)(millis() - animationPreviousMillis) >=
+        animationInterval) {
       // Set curret millis as previous step time
       animationPreviousMillis = millis();
 
@@ -161,7 +162,7 @@ void loadConfig() {
 
   // Load sound id
   soundId = preferences.getUInt("soundid", 1);
-  
+
   // Load hit time
   hitTime = preferences.getUInt("hittime", defaultHitTime);
 
@@ -180,20 +181,21 @@ void checkIrData() {
       uint8_t ipBlock4;
       uint8_t command;
       uint8_t value;
-      irDecode(IrReceiver.decodedIRData.decodedRawData, ipBlock3, ipBlock4, command, value);
+      irDecode(IrReceiver.decodedIRData.decodedRawData, ipBlock3, ipBlock4,
+               command, value);
 
       // Command = 1 and Value = 1 == Shot
       if (command == 1 && value == 1) {
         hitAction(ipBlock3, ipBlock4);
 
-      // Command = 2 and Value = 1 == Open config portal
-      } else if(command == 2 && value == 1) {
+        // Command = 2 and Value = 1 == Open config portal
+      } else if (command == 2 && value == 1) {
         openConfigPortalAction();
       }
     }
 
     // Enable receiving of the next value
-    IrReceiver.resume(); 
+    IrReceiver.resume();
   }
 }
 
@@ -218,7 +220,7 @@ void hitAction(uint8_t ipBlock3, uint8_t ipBlock4) {
 
   String topicValue = "PlaySound:";
   topicValue += String(soundId);
-  
+
   mqttClient.publish(topic.c_str(), topicValue.c_str());
 }
 
@@ -248,7 +250,8 @@ void setupWifi() {
   // Custom menu
   // Added param for custom configuration
   // Added exit to start loop after configuration
-  std::vector<const char *> menu = {"wifi","info","param","close","sep","update","exit"};
+  std::vector<const char *> menu = {"wifi", "info",   "param", "close",
+                                    "sep",  "update", "exit"};
   wm.setMenu(menu);
 
   // Setup Callback to save custom params
@@ -257,7 +260,7 @@ void setupWifi() {
   // Init Wifi
   bool res;
   res = wm.autoConnect(wifiName, wifiPassword);
-  if(!res) {
+  if (!res) {
     ESP.restart();
   }
 }
@@ -270,9 +273,7 @@ void setupSwitches() {
 }
 
 // Setup Infrared
-void setupIr() {
-  IrReceiver.begin(IR_PIN, false);
-}
+void setupIr() { IrReceiver.begin(IR_PIN, false); }
 
 // Setup LEDs
 void setupLeds() {
@@ -283,19 +284,18 @@ void setupLeds() {
 
 // Setup animation loop
 void setupAnimationLoop() {
-  xTaskCreatePinnedToCore (
-  loopAnimation,      // Function to implement the task
-    "loopAnimation",  // Name of the task
-    10000,            // Stack size in bytes
-    NULL,             // Task input parameter
-    1,                // Priority of the task
-    NULL,             // Task handle.
-    1                 // Core where the task should run
+  xTaskCreatePinnedToCore(loopAnimation,   // Function to implement the task
+                          "loopAnimation", // Name of the task
+                          10000,           // Stack size in bytes
+                          NULL,            // Task input parameter
+                          1,               // Priority of the task
+                          NULL,            // Task handle.
+                          1                // Core where the task should run
   );
 }
 
 // Callback for Wifi to save custom params
-void saveWifiParamsCallback () {
+void saveWifiParamsCallback() {
   // Open the storage
   preferences.begin("target-data", false);
 
@@ -318,7 +318,7 @@ void saveWifiParamsCallback () {
 
 // Helper function to set all LEDs to one color
 void setColor(uint32_t color) {
-  for(int i=0; i<strip.numPixels(); i++) {
+  for (int i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, color);
   }
   strip.show();
@@ -344,10 +344,12 @@ void animationHit() {
   strip.clear();
   int distance;
   long maxBrightness = map(millis(), timeOfHit, (timeOfHit + hitTime), 0, 255);
-  
-  for(int i=0; i<strip.numPixels(); i++) {
-    distance = (i <= animationStep) ? (animationStep - i) : (strip.numPixels() - i + animationStep);
-    strip.setPixelColor(i, strip.Color(map(distance, 0, 11, maxBrightness, 0), 0, 0, 0));
+
+  for (int i = 0; i < strip.numPixels(); i++) {
+    distance = (i <= animationStep) ? (animationStep - i)
+                                    : (strip.numPixels() - i + animationStep);
+    strip.setPixelColor(
+        i, strip.Color(map(distance, 0, 11, maxBrightness, 0), 0, 0, 0));
   }
   strip.show();
 
@@ -362,7 +364,7 @@ void mqttReconnect() {
 
     if (mqttClient.connect(clientId.c_str())) {
       Serial.println("connected");
-      //mqttClient.publish("WandStations/All", topic.c_str());
+      // mqttClient.publish("WandStations/All", topic.c_str());
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
@@ -372,7 +374,8 @@ void mqttReconnect() {
   }
 }
 
-void irDecode(uint32_t irData, uint8_t &ipBlock3, uint8_t &ipBlock4, uint8_t &command, uint8_t &value){
+void irDecode(uint32_t irData, uint8_t &ipBlock3, uint8_t &ipBlock4,
+              uint8_t &command, uint8_t &value) {
   ipBlock3 = irData >> 24;
   ipBlock4 = irData << 8 >> 24;
   command = irData << 16 >> 24;
