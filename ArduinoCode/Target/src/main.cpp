@@ -11,6 +11,7 @@
  */
 
 // Includes
+#include "Arduino.h"
 #include <Adafruit_NeoPixel.h>
 #include <IRremote.hpp>
 #include <Preferences.h>
@@ -19,6 +20,7 @@
 #include <WiFiClient.h>
 #include <WiFiManager.h>
 #include <arduino-timer.h>
+
 
 // Timer SetUp
 auto timer = timer_create_default();
@@ -67,6 +69,28 @@ long animationStep = 0;
 // General
 bool hit = false;
 unsigned long timeOfHit = 0;
+
+// Declarations
+void loopAnimation(void);
+void enableTarget();
+void targetHit();
+void loadConfig();
+void checkIrData();
+void openConfigPortalAction();
+void hitAction(uint8_t, uint8_t);
+bool enableTargetTimer(void);
+void setupWifi();
+void setupSwitches();
+void setupIr();
+void setupLeds();
+void setupAnimationLoop();
+void saveWifiParamsCallback();
+void setColor(uint32_t);
+void resetAnimation(int);
+void rainbow();
+void animationHit();
+void mqttReconnect();
+void irDecode(uint32_t, uint8_t, uint8_t, uint8_t, uint8_t);
 
 // Target Setup
 void setup() {
